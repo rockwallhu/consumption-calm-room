@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>消费冷静室</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --primary: #0EA5E9;
+    --primary-light: #E0F2FE;
+    --primary-dark: #0284C7;
+    --accent: #F59E0B;
+    --accent-light: #FEF3C7;
+    --danger: #EF4444;
+    --success: #10B981;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --text: #1E293B;
+    --text-secondary: #64748B;
+    --text-tertiary: #94A3B8;
+    --border: #E2E8F0;
+    --shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 25px rgba(14,165,233,0.15);
+    --radius: 16px;
+    --radius-sm: 12px;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+    overflow-x: hidden;
+  }
+  .page { display: none; animation: fadeIn 0.3s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Header */
+  .header {
+    padding: 24px 20px 16px;
+    background: linear-gradient(135deg, var(--primary) 0%, #06B6D4 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 200px;
+    height: 200px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+  }
+  .header-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; position: relative; }
+  .header-sub { font-size: 13px; opacity: 0.85; margin-top: 4px; position: relative; }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin: 12px 16px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-title {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  /* Rate Display */
+  .rate-display {
+    text-align: center;
+    padding: 8px 0 4px;
+  }
+  .rate-number {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+  .rate-unit {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .rate-detail {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-top: 8px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* Inputs */
+  .input-group { margin-bottom: 16px; }
+  .input-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    display: block;
+    font-weight: 500;
+  }
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .input-wrap:focus-within {
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+  .input-prefix {
+    padding-left: 14px;
+    font-size: 18px;
+    color: var(--text-tertiary);
+    font-weight: 600;
+  }
+  input[type="number"], input[type="text"], input[type="url"] {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 12px 14px;
+    font-size: 16px;
+    color: var(--text);
+    outline: none;
+    font-family: inherit;
+    width: 100%;
+  }
+  input::placeholder { color: var(--text-tertiary); }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+  /* Toggle */
+  .mode-toggle {
+    display: flex;
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 16px;
+  }
+  .mode-btn {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+  }
+  .mode-btn.active {
+    background: white;
+    color: var(--primary);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  /* Collapsible */
+  .collapse-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .collapse-icon { transition: transform 0.2s; font-size: 12px; }
+  .collapse-header.open .collapse-icon { transform: rotate(180deg); }
+  .collapse-body { display: none; padding-bottom: 8px; }
+  .collapse-body.open { display: block; animation: fadeIn 0.2s ease; }
+
+  /* Result */
+  .result-card {
+    background: linear-gradient(135deg, var(--primary-light) 0%, #F0F9FF 100%);
+    border: 1px solid #BAE6FD;
+    text-align: center;
+    padding: 24px 20px;
+  }
+  .result-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+  .result-value {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--primary-dark);
+    line-height: 1;
+  }
+  .result-desc { font-size: 14px; color: var(--text-secondary); margin-top: 8px; }
+
+  /* Warning */
+  .warning-card {
+    background: linear-gradient(135deg, var(--accent-light) 0%, #FFFBEB 100%);
+    border: 1px solid #FCD34D;
+  }
+  .warning-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #B45309;
+    margin-bottom: 8px;
+  }
+  .warning-text { font-size: 14px; color: #92400E; line-height: 1.6; }
+
+  /* Buttons */
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, #06B6D4 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+  }
+  .btn-primary:active { transform: scale(0.98); box-shadow: 0 2px 6px rgba(14,165,233,0.2); }
+  .btn-secondary {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-danger {
+    background: #FEE2E2;
+    color: var(--danger);
+  }
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 13px;
+    width: auto;
+  }
+
+  /* Records */
+  .record-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    background: var(--card);
+    border-radius: var(--radius-sm);
+    margin: 8px 16px;
+    box-shadow: var(--shadow);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .record-item:active { transform: scale(0.99); }
+  .record-info { flex: 1; min-width: 0; }
+  .record-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .record-meta {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+  }
+  .record-amount {
+    text-align: right;
+    margin-right: 12px;
+  }
+  .record-price { font-size: 15px; font-weight: 700; color: var(--text); }
+  .record-hours { font-size: 12px; color: var(--primary); font-weight: 600; }
+  .record-delete {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: #FEE2E2;
+    color: var(--danger);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-tertiary);
+  }
+  .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+
+  /* Tab Bar */
+  .tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  .tab-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    height: 100%;
+    cursor: pointer;
+    color: var(--text-tertiary);
+    transition: color 0.2s;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    padding: 0;
+  }
+  .tab-item.active { color: var(--primary); }
+  .tab-icon { font-size: 22px; line-height: 1; }
+  .tab-label { font-size: 11px; font-weight: 500; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: var(--text);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 200;
+    opacity: 0;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* Tag */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 6px;
+  }
+  .tag-pending { background: var(--accent-light); color: #B45309; }
+  .tag-bought { background: #D1FAE5; color: #065F46; }
+  .tag-givenup { background: #F1F5F9; color: var(--text-tertiary); }
+
+  /* Slider - Fixed */
+  .slider-wrap { margin: 8px 0; }
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 4px;
+  }
+  .slider-labels span {
+    flex: 1;
+    text-align: center;
+  }
+  .slider-labels span:first-child {
+    text-align: left;
+  }
+  .slider-labels span:last-child {
+    text-align: right;
+  }
+  input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    outline: none;
+    -webkit-appearance: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(14,165,233,0.4);
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 300;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-sheet {
+    background: var(--card);
+    border-radius: var(--radius) var(--radius) 0 0;
+    width: 100%;
+    max-width: 414px;
+    padding: 20px;
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .modal-title { font-size: 18px; font-weight: 700; }
+  .modal-close {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tag-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 12px 0;
+  }
+  .tag-option {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid var(--border);
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .tag-option.selected {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-weight: 600;
+  }
+
+  /* Footer Signature */
+  .signature {
+    text-align: center;
+    padding: 32px 20px 16px;
+    color: var(--text-tertiary);
+  }
+  .signature-line {
+    width: 24px;
+    height: 1px;
+    background: var(--border);
+    margin: 0 auto 12px;
+  }
+  .signature-text {
+    font-size: 12px;
+    letter-spacing: 0.8px;
+    font-weight: 400;
+  }
+  .signature-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Responsive */
+  @media (min-width: 768px) {
+    body { max-width: 414px; margin: 0 auto; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+    .tab-bar { max-width: 414px; left: 50%; transform: translateX(-50%); }
+    .toast { max-width: 414px; }
+  }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">编辑记录</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="input-group">
+      <label class="input-label">产品名称</label>
+      <div class="input-wrap">
+        <input type="text" id="editName" placeholder="商品名称">
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">状态标签</label>
+      <div class="tag-options">
+        <button class="tag-option" data-tag="" onclick="selectTag(this)">无标签</button>
+        <button class="tag-option" data-tag="pending" onclick="selectTag(this)">稍后考虑</button>
+        <button class="tag-option" data-tag="bought" onclick="selectTag(this)">已购买</button>
+        <button class="tag-option" data-tag="givenup" onclick="selectTag(this)">已放弃</button>
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">备注</label>
+      <div class="input-wrap">
+        <input type="text" id="editNote" placeholder="添加备注...">
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="saveEdit()">保存修改</button>
+  </div>
+</div>
+
+<!-- ========== PAGE: EVALUATE ========== -->
+<div class="page active" id="page-evaluate">
+  <div class="header">
+    <div class="header-title">消费冷静室</div>
+    <div class="header-sub">让每一笔消费都经得起时间的考验</div>
+  </div>
+
+  <!-- Rate Card -->
+  <div class="card" id="rateCard" style="display:none;">
+    <div class="card-title">你的生命能量</div>
+    <div class="rate-display">
+      <div class="rate-number" id="displayRate">--</div>
+      <div class="rate-unit">元 / 小时</div>
+      <div class="rate-detail" id="rateDetail"></div>
+    </div>
+  </div>
+
+  <!-- Setup Prompt -->
+  <div class="card" id="setupPrompt" style="text-align:center; padding: 32px 20px;">
+    <div style="font-size: 42px; margin-bottom: 12px;">⚡</div>
+    <div style="font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 6px;">请先设置你的时薪</div>
+    <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">只需一分钟，了解你的时间价值</div>
+    <button class="btn btn-primary" onclick="switchPage('settings')">去设置</button>
+  </div>
+
+  <!-- Evaluate Form -->
+  <div class="card" id="evaluateForm" style="display:none;">
+    <div class="card-title">消费评估</div>
+    <div class="input-group">
+      <label class="input-label">商品价格</label>
+      <div class="input-wrap">
+        <span class="input-prefix">¥</span>
+        <input type="number" id="evalAmount" placeholder="0.00" step="0.01" oninput="calculateEval()">
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">产品名称 <span style="color:var(--text-tertiary);font-weight:400;">(选填)</span></label>
+      <div class="input-wrap">
+        <input type="text" id="evalName" placeholder="例如：AirPods Pro">
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">商品链接 <span style="color:var(--text-tertiary);font-weight:400;">(选填)</span></label>
+      <div class="input-wrap">
+        <input type="url" id="evalLink" placeholder="https://...">
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div class="card result-card" id="evalResult" style="display:none; margin: 16px 0 0 0;">
+      <div class="result-label">你需要工作</div>
+      <div class="result-value" id="evalHours">--</div>
+      <div class="result-desc" id="evalDesc">才能买下这件商品</div>
+    </div>
+
+    <!-- Warning -->
+    <div class="card warning-card" id="evalWarning" style="display:none; margin: 12px 0 0 0;">
+      <div class="warning-title">⚠️ 冷静一下</div>
+      <div class="warning-text" id="warningText">这笔消费需要你付出不少时间，建议先加入&quot;稍后考虑&quot;清单。</div>
+    </div>
+
+    <button class="btn btn-primary" style="margin-top: 16px;" onclick="saveRecord()" id="saveBtn" disabled>保存记录</button>
+  </div>
+</div>
+
+<!-- ========== PAGE: RECORDS ========== -->
+<div class="page" id="page-records">
+  <div class="header">
+    <div class="header-title">消费记录</div>
+    <div class="header-sub">回顾你的消费决策</div>
+  </div>
+  <div id="recordsList"></div>
+</div>
+
+<!-- ========== PAGE: SETTINGS ========== -->
+<div class="page" id="page-settings">
+  <div class="header">
+    <div class="header-title">设置</div>
+    <div class="header-sub">配置你的生命能量参数</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">收入配置</div>
+    <div class="mode-toggle">
+      <button class="mode-btn active" onclick="setMode('simple')" id="btnSimple">简单模式</button>
+      <button class="mode-btn" onclick="setMode('complex')" id="btnComplex">复杂模式</button>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">月薪（税前）</label>
+      <div class="input-wrap">
+        <span class="input-prefix">¥</span>
+        <input type="number" id="monthlySalary" placeholder="0" oninput="calculateRate()">
+      </div>
+    </div>
+
+    <div id="complexFields" style="display:none;">
+      <div class="input-group">
+        <label class="input-label">年终奖（税前）</label>
+        <div class="input-wrap">
+          <span class="input-prefix">¥</span>
+          <input type="number" id="annualBonus" placeholder="0" oninput="calculateRate()">
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">其他年收入（税前）</label>
+        <div class="input-wrap">
+          <span class="input-prefix">¥</span>
+          <input type="number" id="otherIncome" placeholder="0" oninput="calculateRate()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="collapse-header" onclick="toggleCollapse(this)">
+      <span>工作参数</span>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="collapse-body" id="workParams">
+      <div class="input-group">
+        <label class="input-label">每年工作月数</label>
+        <div class="input-wrap">
+          <input type="number" id="workMonths" value="12" oninput="calculateRate()">
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">每月工作天数</label>
+        <div class="input-wrap">
+          <input type="number" id="workDaysPerMonth" value="21.75" step="0.01" oninput="calculateRate()">
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">每日工作时长</label>
+        <div class="input-wrap">
+          <input type="number" id="workHoursPerDay" value="8" oninput="calculateRate()">
+          <span style="padding-right:14px; color:var(--text-tertiary); font-size:14px;">小时</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">冷静期设置</div>
+    <div style="font-size:13px; color:var(--text-secondary); margin-bottom:10px;">
+      当商品价格超过 <strong id="thresholdDisplay" style="color:var(--primary);">3</strong> 倍时薪时，触发冷静提示
+    </div>
+    <div class="slider-wrap">
+      <input type="range" id="calmThreshold" min="1" max="10" value="3" step="1" oninput="updateThreshold(this.value)">
+      <div class="slider-labels">
+        <span>1倍</span><span>5倍</span><span>10倍</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="previewCard" style="display:none;">
+    <div class="card-title">计算预览</div>
+    <div class="rate-display">
+      <div class="rate-number" id="previewRate">--</div>
+      <div class="rate-unit">元 / 小时</div>
+    </div>
+  </div>
+
+  <div class="card" style="padding: 12px 20px;">
+    <button class="btn btn-primary" onclick="saveSettings()">保存配置</button>
+  </div>
+
+  <div class="card" style="padding: 12px 20px;">
+    <button class="btn btn-danger" onclick="clearAllData()">清除所有数据</button>
+  </div>
+
+  <!-- Signature Footer -->
+  <div class="signature">
+    <div class="signature-line"></div>
+    <div class="signature-text">Designed for mindful spending</div>
+    <div class="signature-name">Rockwall Hu</div>
+  </div>
+</div>
+
+<!-- Tab Bar -->
+<div class="tab-bar">
+  <button class="tab-item active" onclick="switchPage('evaluate')">
+    <span class="tab-icon">⚡</span>
+    <span class="tab-label">评估</span>
+  </button>
+  <button class="tab-item" onclick="switchPage('records')">
+    <span class="tab-icon">📋</span>
+    <span class="tab-label">记录</span>
+  </button>
+  <button class="tab-item" onclick="switchPage('settings')">
+    <span class="tab-icon">⚙️</span>
+    <span class="tab-label">设置</span>
+  </button>
+</div>
+
+<script>
+// ===== State =====
+let config = {
+  mode: 'simple',
+  monthlySalary: 0,
+  annualBonus: 0,
+  otherIncome: 0,
+  workMonths: 12,
+  workDaysPerMonth: 21.75,
+  workHoursPerDay: 8,
+  calmThreshold: 3
+};
+let hourlyRate = 0;
+let records = [];
+let editingId = null;
+let selectedTag = '';
+
+// ===== Quotes (Hardcoded) =====
+const quotes = [
+  "这笔钱需要你工作一整天，确定现在就要花吗？",
+  "想象一下：为了这个东西，你要在办公室多坐好几个小时。",
+  "深夜的消费决策往往伴随着疲惫，建议明早再想想。",
+  "现在你的意志力余额不足，这笔消费可以等到明天吗？",
+  "你上周刚买过类似的东西，这次是真的需要吗？",
+  "拥有的东西不会带来持久的快乐，但存款可以带来安全感。",
+  "每一分钱，都是你生命的一部分。",
+  "买之前问自己：一个月后我还会为这笔消费开心吗？",
+  "便宜的东西，如果不需要，也是贵的。",
+  "你真正需要的，往往比你想买的少得多。",
+  "为了这件物品，你愿意付出这么多生命时间吗？",
+  "消费前冷静三秒，钱包会感谢你的。"
+];
+
+// ===== Init =====
+function init() {
+  const saved = localStorage.getItem('calmroom_config');
+  const savedRecords = localStorage.getItem('calmroom_records');
+  if (saved) {
+    config = JSON.parse(saved);
+    hourlyRate = calculateHourlyRate();
+    updateSettingsUI();
+    showRateCard();
+  }
+  if (savedRecords) {
+    records = JSON.parse(savedRecords);
+  }
+  renderRecords();
+}
+
+// ===== Page Switch =====
+function switchPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  const tabIndex = page === 'evaluate' ? 0 : page === 'records' ? 1 : 2;
+  document.querySelectorAll('.tab-item')[tabIndex].classList.add('active');
+  if (page === 'records') renderRecords();
+}
+
+// ===== Settings =====
+function setMode(mode) {
+  config.mode = mode;
+  document.getElementById('btnSimple').classList.toggle('active', mode === 'simple');
+  document.getElementById('btnComplex').classList.toggle('active', mode === 'complex');
+  document.getElementById('complexFields').style.display = mode === 'complex' ? 'block' : 'none';
+  calculateRate();
+}
+
+function toggleCollapse(el) {
+  el.classList.toggle('open');
+  document.getElementById('workParams').classList.toggle('open');
+}
+
+function updateThreshold(val) {
+  config.calmThreshold = parseInt(val);
+  document.getElementById('thresholdDisplay').textContent = val;
+}
+
+function calculateHourlyRate() {
+  let annual = config.monthlySalary * 12;
+  if (config.mode === 'complex') {
+    annual += (config.annualBonus || 0) + (config.otherIncome || 0);
+  }
+  const totalHours = (config.workMonths || 12) * (config.workDaysPerMonth || 21.75) * (config.workHoursPerDay || 8);
+  if (totalHours <= 0 || annual <= 0) return 0;
+  return Math.round((annual / totalHours) * 10) / 10;
+}
+
+function calculateRate() {
+  config.monthlySalary = parseFloat(document.getElementById('monthlySalary').value) || 0;
+  config.annualBonus = parseFloat(document.getElementById('annualBonus').value) || 0;
+  config.otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
+  config.workMonths = parseFloat(document.getElementById('workMonths').value) || 12;
+  config.workDaysPerMonth = parseFloat(document.getElementById('workDaysPerMonth').value) || 21.75;
+  config.workHoursPerDay = parseFloat(document.getElementById('workHoursPerDay').value) || 8;
+
+  const rate = calculateHourlyRate();
+  if (rate > 0) {
+    document.getElementById('previewCard').style.display = 'block';
+    document.getElementById('previewRate').textContent = '¥' + rate;
+  }
+}
+
+function updateSettingsUI() {
+  document.getElementById('monthlySalary').value = config.monthlySalary || '';
+  document.getElementById('annualBonus').value = config.annualBonus || '';
+  document.getElementById('otherIncome').value = config.otherIncome || '';
+  document.getElementById('workMonths').value = config.workMonths;
+  document.getElementById('workDaysPerMonth').value = config.workDaysPerMonth;
+  document.getElementById('workHoursPerDay').value = config.workHoursPerDay;
+  document.getElementById('calmThreshold').value = config.calmThreshold;
+  document.getElementById('thresholdDisplay').textContent = config.calmThreshold;
+  setMode(config.mode);
+}
+
+function saveSettings() {
+  calculateRate();
+  hourlyRate = calculateHourlyRate();
+  if (hourlyRate <= 0) {
+    showToast('请填写有效的收入信息');
+    return;
+  }
+  localStorage.setItem('calmroom_config', JSON.stringify(config));
+  showToast('配置已保存');
+  showRateCard();
+  switchPage('evaluate');
+}
+
+function showRateCard() {
+  if (hourlyRate > 0) {
+    document.getElementById('setupPrompt').style.display = 'none';
+    document.getElementById('rateCard').style.display = 'block';
+    document.getElementById('evaluateForm').style.display = 'block';
+    document.getElementById('displayRate').textContent = '¥' + hourlyRate;
+    document.getElementById('rateDetail').innerHTML = `
+      <span>${config.workMonths}个月</span>
+      <span>${config.workDaysPerMonth}天/月</span>
+      <span>${config.workHoursPerDay}小时/天</span>
+    `;
+  }
+}
+
+// ===== Evaluate =====
+function calculateEval() {
+  const amount = parseFloat(document.getElementById('evalAmount').value) || 0;
+  if (amount <= 0 || hourlyRate <= 0) {
+    document.getElementById('evalResult').style.display = 'none';
+    document.getElementById('evalWarning').style.display = 'none';
+    document.getElementById('saveBtn').disabled = true;
+    return;
+  }
+  const hours = Math.round((amount / hourlyRate) * 10) / 10;
+  document.getElementById('evalResult').style.display = 'block';
+  document.getElementById('evalHours').textContent = hours + ' 小时';
+
+  let desc = '才能买下这件商品';
+  if (hours >= 8) desc = '≈ 整整 ' + Math.round(hours / 8 * 10) / 10 + ' 个工作日';
+  else if (hours >= 4) desc = '≈ 半个工作日';
+  else if (hours >= 1) desc = '≈ ' + Math.round(hours * 60) + ' 分钟';
+  document.getElementById('evalDesc').textContent = desc;
+
+  if (hours >= config.calmThreshold) {
+    document.getElementById('evalWarning').style.display = 'block';
+    document.getElementById('warningText').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+  } else {
+    document.getElementById('evalWarning').style.display = 'none';
+  }
+
+  document.getElementById('saveBtn').disabled = false;
+}
+
+function saveRecord() {
+  const amount = parseFloat(document.getElementById('evalAmount').value) || 0;
+  const name = document.getElementById('evalName').value.trim() || '未命名商品';
+  const link = document.getElementById('evalLink').value.trim();
+  if (amount <= 0 || hourlyRate <= 0) return;
+
+  const hours = Math.round((amount / hourlyRate) * 10) / 10;
+  const record = {
+    id: Date.now(),
+    name,
+    link,
+    amount,
+    hours,
+    hourlyRate,
+    tag: hours >= config.calmThreshold ? 'pending' : '',
+    note: '',
+    createdAt: new Date().toISOString()
+  };
+  records.unshift(record);
+  localStorage.setItem('calmroom_records', JSON.stringify(records));
+
+  document.getElementById('evalAmount').value = '';
+  document.getElementById('evalName').value = '';
+  document.getElementById('evalLink').value = '';
+  document.getElementById('evalResult').style.display = 'none';
+  document.getElementById('evalWarning').style.display = 'none';
+  document.getElementById('saveBtn').disabled = true;
+
+  showToast('已保存到记录');
+}
+
+// ===== Records =====
+function renderRecords() {
+  const container = document.getElementById('recordsList');
+  if (records.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <div style="font-size:15px; font-weight:600; color:var(--text-secondary); margin-bottom:4px;">暂无记录</div>
+        <div style="font-size:13px;">去评估页面试算一笔消费吧</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = records.map(r => {
+    const date = new Date(r.createdAt);
+    const dateStr = (date.getMonth() + 1) + '/' + date.getDate() + ' ' + String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0');
+    const tagHtml = r.tag === 'pending' ? '<span class="tag tag-pending">稍后考虑</span>' :
+                    r.tag === 'bought' ? '<span class="tag tag-bought">已购买</span>' :
+                    r.tag === 'givenup' ? '<span class="tag tag-givenup">已放弃</span>' : '';
+    return `
+      <div class="record-item" onclick="openEditModal(${r.id})">
+        <div class="record-info">
+          <div class="record-name">${escapeHtml(r.name)}${tagHtml}</div>
+          <div class="record-meta">${dateStr}${r.note ? ' · ' + escapeHtml(r.note) : ''}</div>
+        </div>
+        <div class="record-amount">
+          <div class="record-price">¥${r.amount}</div>
+          <div class="record-hours">${r.hours}h</div>
+        </div>
+        <button class="record-delete" onclick="event.stopPropagation(); deleteRecord(${r.id})">🗑</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function deleteRecord(id) {
+  if (!confirm('确定删除这条记录吗？')) return;
+  records = records.filter(r => r.id !== id);
+  localStorage.setItem('calmroom_records', JSON.stringify(records));
+  renderRecords();
+  showToast('已删除');
+}
+
+// ===== Edit Modal =====
+function openEditModal(id) {
+  const record = records.find(r => r.id === id);
+  if (!record) return;
+  editingId = id;
+  document.getElementById('editName').value = record.name;
+  document.getElementById('editNote').value = record.note || '';
+  selectedTag = record.tag || '';
+
+  document.querySelectorAll('.tag-option').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.tag === selectedTag);
+  });
+
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modalOverlay')) return;
+  document.getElementById('modalOverlay').classList.remove('show');
+  editingId = null;
+}
+
+function selectTag(btn) {
+  selectedTag = btn.dataset.tag;
+  document.querySelectorAll('.tag-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function saveEdit() {
+  if (!editingId) return;
+  const record = records.find(r => r.id === editingId);
+  if (!record) return;
+
+  record.name = document.getElementById('editName').value.trim() || record.name;
+  record.note = document.getElementById('editNote').value.trim();
+  record.tag = selectedTag;
+
+  localStorage.setItem('calmroom_records', JSON.stringify(records));
+  closeModal();
+  renderRecords();
+  showToast('已更新');
+}
+
+// ===== Utils =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function clearAllData() {
+  if (!confirm('确定清除所有数据吗？此操作不可恢复。')) return;
+  localStorage.removeItem('calmroom_config');
+  localStorage.removeItem('calmroom_records');
+  config = { mode: 'simple', monthlySalary: 0, annualBonus: 0, otherIncome: 0, workMonths: 12, workDaysPerMonth: 21.75, workHoursPerDay: 8, calmThreshold: 3 };
+  hourlyRate = 0;
+  records = [];
+  updateSettingsUI();
+  document.getElementById('previewCard').style.display = 'none';
+  document.getElementById('setupPrompt').style.display = 'block';
+  document.getElementById('rateCard').style.display = 'none';
+  document.getElementById('evaluateForm').style.display = 'none';
+  showToast('所有数据已清除');
+  switchPage('evaluate');
+}
+
+// ===== Boot =====
+init();
+</script>
+</body>
+</html>
