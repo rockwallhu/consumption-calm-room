@@ -37,7 +37,6 @@
   .page.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* Header */
   .header {
     padding: 24px 20px 16px;
     background: linear-gradient(135deg, var(--primary) 0%, #06B6D4 100%);
@@ -58,7 +57,6 @@
   .header-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; position: relative; }
   .header-sub { font-size: 13px; opacity: 0.85; margin-top: 4px; position: relative; }
 
-  /* Cards */
   .card {
     background: var(--card);
     border-radius: var(--radius);
@@ -77,7 +75,6 @@
     font-weight: 600;
   }
 
-  /* Rate Display */
   .rate-display {
     text-align: center;
     padding: 8px 0 4px;
@@ -104,7 +101,6 @@
     flex-wrap: wrap;
   }
 
-  /* Inputs */
   .input-group { margin-bottom: 16px; }
   .input-label {
     font-size: 13px;
@@ -148,7 +144,6 @@
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 
-  /* Toggle */
   .mode-toggle {
     display: flex;
     background: var(--bg);
@@ -176,7 +171,6 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   }
 
-  /* Collapsible */
   .collapse-header {
     display: flex;
     justify-content: space-between;
@@ -192,7 +186,6 @@
   .collapse-body { display: none; padding-bottom: 8px; }
   .collapse-body.open { display: block; animation: fadeIn 0.2s ease; }
 
-  /* Result */
   .result-card {
     background: linear-gradient(135deg, var(--primary-light) 0%, #F0F9FF 100%);
     border: 1px solid #BAE6FD;
@@ -208,7 +201,6 @@
   }
   .result-desc { font-size: 14px; color: var(--text-secondary); margin-top: 8px; }
 
-  /* Warning */
   .warning-card {
     background: linear-gradient(135deg, var(--accent-light) 0%, #FFFBEB 100%);
     border: 1px solid #FCD34D;
@@ -224,7 +216,6 @@
   }
   .warning-text { font-size: 14px; color: #92400E; line-height: 1.6; }
 
-  /* Buttons */
   .btn {
     width: 100%;
     padding: 14px;
@@ -261,7 +252,6 @@
     width: auto;
   }
 
-  /* Records */
   .record-item {
     display: flex;
     align-items: center;
@@ -314,7 +304,6 @@
   }
   .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
 
-  /* Tab Bar */
   .tab-bar {
     position: fixed;
     bottom: 0;
@@ -350,7 +339,6 @@
   .tab-icon { font-size: 22px; line-height: 1; }
   .tab-label { font-size: 11px; font-weight: 500; }
 
-  /* Toast */
   .toast {
     position: fixed;
     top: 20px;
@@ -369,7 +357,6 @@
   }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-  /* Tag */
   .tag {
     display: inline-block;
     padding: 2px 8px;
@@ -382,19 +369,26 @@
   .tag-bought { background: #D1FAE5; color: #065F46; }
   .tag-givenup { background: #F1F5F9; color: var(--text-tertiary); }
 
-  /* Slider - Fixed with Grid */
-  .slider-wrap { margin: 8px 0; }
+  .slider-wrap {
+    margin: 8px 0;
+    padding: 0 10px;
+  }
   .slider-labels {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    position: relative;
     font-size: 11px;
     color: var(--text-tertiary);
     margin-top: 8px;
-    padding: 0 10px;
+    height: 16px;
   }
-  .slider-labels span:nth-child(1) { text-align: left; }
-  .slider-labels span:nth-child(2) { text-align: center; }
-  .slider-labels span:nth-child(3) { text-align: right; }
+  .slider-labels span {
+    position: absolute;
+    top: 0;
+    white-space: nowrap;
+  }
+  .slider-labels span:nth-child(1) { left: 0; }
+  .slider-labels span:nth-child(2) { left: 44.444%; transform: translateX(-50%); }
+  .slider-labels span:nth-child(3) { right: 0; }
+
   input[type="range"] {
     width: 100%;
     height: 6px;
@@ -404,43 +398,9 @@
     -webkit-appearance: none;
     appearance: none;
     margin: 0;
-    padding: 0 10px;
-    box-sizing: border-box;
-  }
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--primary);
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(14,165,233,0.4);
-    margin-top: -7px;
-  }
-  input[type="range"]::-webkit-slider-runnable-track {
-    height: 6px;
-    border-radius: 3px;
-    background: var(--border);
-  }
-  .slider-wrap { margin: 8px 0; }
-  .slider-labels {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    font-size: 11px;
-    color: var(--text-tertiary);
-    margin-top: 6px;
-  }
-  .slider-labels span:nth-child(1) { text-align: left; }
-  .slider-labels span:nth-child(2) { text-align: center; }
-  .slider-labels span:nth-child(3) { text-align: right; }
-  input[type="range"] {
-    width: 100%;
-    height: 6px;
-    border-radius: 3px;
-    background: var(--border);
-    outline: none;
-    -webkit-appearance: none;
-    margin: 0;
+    padding: 0;
+    border: none;
+    display: block;
   }
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -458,7 +418,6 @@
     background: var(--border);
   }
 
-  /* Modal */
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -520,7 +479,6 @@
     font-weight: 600;
   }
 
-  /* Footer Signature */
   .signature {
     text-align: center;
     padding: 32px 20px 16px;
@@ -545,26 +503,22 @@
     letter-spacing: 0.5px;
   }
 
-  /* Responsive */
   @media (min-width: 768px) {
     body { max-width: 414px; margin: 0 auto; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
     .tab-bar { max-width: 414px; left: 50%; transform: translateX(-50%); }
     .toast { max-width: 414px; }
   }
 </style>
-<base target="_blank">
 </head>
 <body>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- Modal -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal-sheet" onclick="event.stopPropagation()">
     <div class="modal-header">
       <div class="modal-title">编辑记录</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <button class="modal-close" onclick="closeModal()">&#10005;</button>
     </div>
     <div class="input-group">
       <label class="input-label">产品名称</label>
@@ -591,14 +545,12 @@
   </div>
 </div>
 
-<!-- ========== PAGE: EVALUATE ========== -->
 <div class="page active" id="page-evaluate">
   <div class="header">
     <div class="header-title">消费冷静室</div>
     <div class="header-sub">让每一笔消费都经得起时间的考验</div>
   </div>
 
-  <!-- Rate Card -->
   <div class="card" id="rateCard" style="display:none;">
     <div class="card-title">你的生命能量</div>
     <div class="rate-display">
@@ -608,21 +560,19 @@
     </div>
   </div>
 
-  <!-- Setup Prompt -->
   <div class="card" id="setupPrompt" style="text-align:center; padding: 32px 20px;">
-    <div style="font-size: 42px; margin-bottom: 12px;">⚡</div>
+    <div style="font-size: 42px; margin-bottom: 12px;">&#9889;</div>
     <div style="font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 6px;">请先设置你的时薪</div>
     <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">只需一分钟，了解你的时间价值</div>
     <button class="btn btn-primary" onclick="switchPage('settings')">去设置</button>
   </div>
 
-  <!-- Evaluate Form -->
   <div class="card" id="evaluateForm" style="display:none;">
     <div class="card-title">消费评估</div>
     <div class="input-group">
       <label class="input-label">商品价格</label>
       <div class="input-wrap">
-        <span class="input-prefix">¥</span>
+        <span class="input-prefix">&#165;</span>
         <input type="number" id="evalAmount" placeholder="0.00" step="0.01" oninput="calculateEval()">
       </div>
     </div>
@@ -639,16 +589,14 @@
       </div>
     </div>
 
-    <!-- Result -->
     <div class="card result-card" id="evalResult" style="display:none; margin: 16px 0 0 0;">
       <div class="result-label">你需要工作</div>
       <div class="result-value" id="evalHours">--</div>
       <div class="result-desc" id="evalDesc">才能买下这件商品</div>
     </div>
 
-    <!-- Warning -->
     <div class="card warning-card" id="evalWarning" style="display:none; margin: 12px 0 0 0;">
-      <div class="warning-title">⚠️ 冷静一下</div>
+      <div class="warning-title">&#9888;&#65039; 冷静一下</div>
       <div class="warning-text" id="warningText">这笔消费需要你付出不少时间，建议先加入&quot;稍后考虑&quot;清单。</div>
     </div>
 
@@ -656,7 +604,6 @@
   </div>
 </div>
 
-<!-- ========== PAGE: RECORDS ========== -->
 <div class="page" id="page-records">
   <div class="header">
     <div class="header-title">消费记录</div>
@@ -665,7 +612,6 @@
   <div id="recordsList"></div>
 </div>
 
-<!-- ========== PAGE: SETTINGS ========== -->
 <div class="page" id="page-settings">
   <div class="header">
     <div class="header-title">设置</div>
@@ -682,7 +628,7 @@
     <div class="input-group">
       <label class="input-label">月薪（税前）</label>
       <div class="input-wrap">
-        <span class="input-prefix">¥</span>
+        <span class="input-prefix">&#165;</span>
         <input type="number" id="monthlySalary" placeholder="0" oninput="calculateRate()">
       </div>
     </div>
@@ -691,14 +637,14 @@
       <div class="input-group">
         <label class="input-label">年终奖（税前）</label>
         <div class="input-wrap">
-          <span class="input-prefix">¥</span>
+          <span class="input-prefix">&#165;</span>
           <input type="number" id="annualBonus" placeholder="0" oninput="calculateRate()">
         </div>
       </div>
       <div class="input-group">
         <label class="input-label">其他年收入（税前）</label>
         <div class="input-wrap">
-          <span class="input-prefix">¥</span>
+          <span class="input-prefix">&#165;</span>
           <input type="number" id="otherIncome" placeholder="0" oninput="calculateRate()">
         </div>
       </div>
@@ -708,7 +654,7 @@
   <div class="card">
     <div class="collapse-header" onclick="toggleCollapse(this)">
       <span>工作参数</span>
-      <span class="collapse-icon">▼</span>
+      <span class="collapse-icon">&#9660;</span>
     </div>
     <div class="collapse-body" id="workParams">
       <div class="input-group">
@@ -741,7 +687,9 @@
     <div class="slider-wrap">
       <input type="range" id="calmThreshold" min="1" max="10" value="3" step="1" oninput="updateThreshold(this.value)">
       <div class="slider-labels">
-        <span>1倍</span><span>5倍</span><span>10倍</span>
+        <span>1倍</span>
+        <span>5倍</span>
+        <span>10倍</span>
       </div>
     </div>
   </div>
@@ -762,7 +710,6 @@
     <button class="btn btn-danger" onclick="clearAllData()">清除所有数据</button>
   </div>
 
-  <!-- Signature Footer -->
   <div class="signature">
     <div class="signature-line"></div>
     <div class="signature-text">Designed for mindful spending</div>
@@ -770,24 +717,22 @@
   </div>
 </div>
 
-<!-- Tab Bar -->
 <div class="tab-bar">
   <button class="tab-item active" onclick="switchPage('evaluate')">
-    <span class="tab-icon">⚡</span>
+    <span class="tab-icon">&#9889;</span>
     <span class="tab-label">评估</span>
   </button>
   <button class="tab-item" onclick="switchPage('records')">
-    <span class="tab-icon">📋</span>
+    <span class="tab-icon">&#128203;</span>
     <span class="tab-label">记录</span>
   </button>
   <button class="tab-item" onclick="switchPage('settings')">
-    <span class="tab-icon">⚙️</span>
+    <span class="tab-icon">&#9881;&#65039;</span>
     <span class="tab-label">设置</span>
   </button>
 </div>
 
 <script>
-// ===== State =====
 let config = {
   mode: 'simple',
   monthlySalary: 0,
@@ -803,23 +748,33 @@ let records = [];
 let editingId = null;
 let selectedTag = '';
 
-// ===== Quotes (Hardcoded) =====
-const quotes = [
-  "这笔钱需要你工作一整天，确定现在就要花吗？",
-  "想象一下：为了这个东西，你要在办公室多坐好几个小时。",
-  "深夜的消费决策往往伴随着疲惫，建议明早再想想。",
-  "现在你的意志力余额不足，这笔消费可以等到明天吗？",
-  "你上周刚买过类似的东西，这次是真的需要吗？",
-  "拥有的东西不会带来持久的快乐，但存款可以带来安全感。",
-  "每一分钱，都是你生命的一部分。",
-  "买之前问自己：一个月后我还会为这笔消费开心吗？",
-  "便宜的东西，如果不需要，也是贵的。",
-  "你真正需要的，往往比你想买的少得多。",
-  "为了这件物品，你愿意付出这么多生命时间吗？",
-  "消费前冷静三秒，钱包会感谢你的。"
-];
+function getDurationText(hours) {
+  const dayHours = config.workHoursPerDay || 8;
+  const monthHours = (config.workDaysPerMonth || 21.75) * dayHours;
+  if (hours >= monthHours) {
+    return '约 ' + (hours / monthHours).toFixed(1) + ' 个月';
+  } else if (hours >= dayHours) {
+    return '约 ' + (hours / dayHours).toFixed(1) + ' 天';
+  } else if (hours >= 1) {
+    return '约 ' + hours.toFixed(1) + ' 小时';
+  } else {
+    return '约 ' + Math.round(hours * 60) + ' 分钟';
+  }
+}
 
-// ===== Init =====
+function getQuote(hours) {
+  const duration = getDurationText(hours);
+  const templates = [
+    '这笔消费需要你工作 ' + duration + '，确定现在就要花吗？',
+    '为了这个东西，你要付出 ' + duration + ' 的生命能量，值得吗？',
+    '想一想：' + duration + ' 的生命时间，换这件物品，你确定吗？',
+    '消费前冷静一下——这可是 ' + duration + ' 的心血。',
+    '买之前问自己：' + duration + ' 的工作，换来这个真的值得吗？',
+    '这笔钱需要你工作 ' + duration + '，建议先加入"稍后考虑"清单。'
+  ];
+  return templates[Math.floor(Math.random() * templates.length)];
+}
+
 function init() {
   const saved = localStorage.getItem('calmroom_config');
   const savedRecords = localStorage.getItem('calmroom_records');
@@ -835,7 +790,6 @@ function init() {
   renderRecords();
 }
 
-// ===== Page Switch =====
 function switchPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
@@ -845,7 +799,6 @@ function switchPage(page) {
   if (page === 'records') renderRecords();
 }
 
-// ===== Settings =====
 function setMode(mode) {
   config.mode = mode;
   document.getElementById('btnSimple').classList.toggle('active', mode === 'simple');
@@ -881,7 +834,6 @@ function calculateRate() {
   config.workMonths = parseFloat(document.getElementById('workMonths').value) || 12;
   config.workDaysPerMonth = parseFloat(document.getElementById('workDaysPerMonth').value) || 21.75;
   config.workHoursPerDay = parseFloat(document.getElementById('workHoursPerDay').value) || 8;
-
   const rate = calculateHourlyRate();
   if (rate > 0) {
     document.getElementById('previewCard').style.display = 'block';
@@ -920,15 +872,11 @@ function showRateCard() {
     document.getElementById('rateCard').style.display = 'block';
     document.getElementById('evaluateForm').style.display = 'block';
     document.getElementById('displayRate').textContent = '¥' + hourlyRate;
-    document.getElementById('rateDetail').innerHTML = `
-      <span>${config.workMonths}个月</span>
-      <span>${config.workDaysPerMonth}天/月</span>
-      <span>${config.workHoursPerDay}小时/天</span>
-    `;
+    document.getElementById('rateDetail').innerHTML =
+      '<span>' + config.workMonths + '个月</span><span>' + config.workDaysPerMonth + '天/月</span><span>' + config.workHoursPerDay + '小时/天</span>';
   }
 }
 
-// ===== Evaluate =====
 function calculateEval() {
   const amount = parseFloat(document.getElementById('evalAmount').value) || 0;
   if (amount <= 0 || hourlyRate <= 0) {
@@ -949,11 +897,10 @@ function calculateEval() {
 
   if (hours >= config.calmThreshold) {
     document.getElementById('evalWarning').style.display = 'block';
-    document.getElementById('warningText').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById('warningText').textContent = getQuote(hours);
   } else {
     document.getElementById('evalWarning').style.display = 'none';
   }
-
   document.getElementById('saveBtn').disabled = false;
 }
 
@@ -962,65 +909,49 @@ function saveRecord() {
   const name = document.getElementById('evalName').value.trim() || '未命名商品';
   const link = document.getElementById('evalLink').value.trim();
   if (amount <= 0 || hourlyRate <= 0) return;
-
   const hours = Math.round((amount / hourlyRate) * 10) / 10;
   const record = {
     id: Date.now(),
-    name,
-    link,
-    amount,
-    hours,
-    hourlyRate,
+    name: name,
+    link: link,
+    amount: amount,
+    hours: hours,
+    hourlyRate: hourlyRate,
     tag: hours >= config.calmThreshold ? 'pending' : '',
     note: '',
     createdAt: new Date().toISOString()
   };
   records.unshift(record);
   localStorage.setItem('calmroom_records', JSON.stringify(records));
-
   document.getElementById('evalAmount').value = '';
   document.getElementById('evalName').value = '';
   document.getElementById('evalLink').value = '';
   document.getElementById('evalResult').style.display = 'none';
   document.getElementById('evalWarning').style.display = 'none';
   document.getElementById('saveBtn').disabled = true;
-
   showToast('已保存到记录');
 }
 
-// ===== Records =====
 function renderRecords() {
   const container = document.getElementById('recordsList');
   if (records.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">📋</div>
-        <div style="font-size:15px; font-weight:600; color:var(--text-secondary); margin-bottom:4px;">暂无记录</div>
-        <div style="font-size:13px;">去评估页面试算一笔消费吧</div>
-      </div>
-    `;
+    container.innerHTML =
+      '<div class="empty-state"><div class="empty-icon">&#128203;</div>' +
+      '<div style="font-size:15px;font-weight:600;color:var(--text-secondary);margin-bottom:4px;">暂无记录</div>' +
+      '<div style="font-size:13px;">去评估页面试算一笔消费吧</div></div>';
     return;
   }
-
   container.innerHTML = records.map(r => {
     const date = new Date(r.createdAt);
     const dateStr = (date.getMonth() + 1) + '/' + date.getDate() + ' ' + String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0');
     const tagHtml = r.tag === 'pending' ? '<span class="tag tag-pending">稍后考虑</span>' :
                     r.tag === 'bought' ? '<span class="tag tag-bought">已购买</span>' :
                     r.tag === 'givenup' ? '<span class="tag tag-givenup">已放弃</span>' : '';
-    return `
-      <div class="record-item" onclick="openEditModal(${r.id})">
-        <div class="record-info">
-          <div class="record-name">${escapeHtml(r.name)}${tagHtml}</div>
-          <div class="record-meta">${dateStr}${r.note ? ' · ' + escapeHtml(r.note) : ''}</div>
-        </div>
-        <div class="record-amount">
-          <div class="record-price">¥${r.amount}</div>
-          <div class="record-hours">${r.hours}h</div>
-        </div>
-        <button class="record-delete" onclick="event.stopPropagation(); deleteRecord(${r.id})">🗑</button>
-      </div>
-    `;
+    return '<div class="record-item" onclick="openEditModal(' + r.id + ')">' +
+      '<div class="record-info"><div class="record-name">' + escapeHtml(r.name) + tagHtml + '</div>' +
+      '<div class="record-meta">' + dateStr + (r.note ? ' · ' + escapeHtml(r.note) : '') + '</div></div>' +
+      '<div class="record-amount"><div class="record-price">¥' + r.amount + '</div><div class="record-hours">' + r.hours + 'h</div></div>' +
+      '<button class="record-delete" onclick="event.stopPropagation();deleteRecord(' + r.id + ')">&#128465;</button></div>';
   }).join('');
 }
 
@@ -1032,7 +963,6 @@ function deleteRecord(id) {
   showToast('已删除');
 }
 
-// ===== Edit Modal =====
 function openEditModal(id) {
   const record = records.find(r => r.id === id);
   if (!record) return;
@@ -1040,11 +970,9 @@ function openEditModal(id) {
   document.getElementById('editName').value = record.name;
   document.getElementById('editNote').value = record.note || '';
   selectedTag = record.tag || '';
-
   document.querySelectorAll('.tag-option').forEach(btn => {
     btn.classList.toggle('selected', btn.dataset.tag === selectedTag);
   });
-
   document.getElementById('modalOverlay').classList.add('show');
 }
 
@@ -1064,18 +992,15 @@ function saveEdit() {
   if (!editingId) return;
   const record = records.find(r => r.id === editingId);
   if (!record) return;
-
   record.name = document.getElementById('editName').value.trim() || record.name;
   record.note = document.getElementById('editNote').value.trim();
   record.tag = selectedTag;
-
   localStorage.setItem('calmroom_records', JSON.stringify(records));
   closeModal();
   renderRecords();
   showToast('已更新');
 }
 
-// ===== Utils =====
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -1105,7 +1030,6 @@ function clearAllData() {
   switchPage('evaluate');
 }
 
-// ===== Boot =====
 init();
 </script>
 </body>
